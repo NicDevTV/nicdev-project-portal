@@ -1,0 +1,6 @@
+name: HeldenCommunity
+version: 0.1.0-SNAPSHOT
+main: tv.nicdev.heldencommunity.HeldenCommunityPlugin
+api-version: '1.20'
+authors: [NicDev]
+description: Core plugin for the Helden Community server.
