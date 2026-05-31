@@ -5,8 +5,9 @@
  */
 package tv.nicdev.heldencommunity.bootstrap;
 
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import tv.nicdev.heldencommunity.infra.config.ConfigService;
 import tv.nicdev.heldencommunity.infra.platform.Paper120Capabilities;
 import tv.nicdev.heldencommunity.infra.platform.PlatformCapabilities;
@@ -52,10 +53,14 @@ public final class PluginBootstrap {
         };
 
         for (String line : banner) {
-            plugin.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + line);
+            plugin.getServer().getConsoleSender().sendMessage(Component.text(line, NamedTextColor.BLUE));
         }
 
-        plugin.getServer().getConsoleSender().sendMessage(ChatColor.RED + "IMPORTANT: THIS PLUGIN IS MAINTAINED BY A VOLUNTEER");
-        plugin.getServer().getConsoleSender().sendMessage(ChatColor.RED + "AND IS NOT OFFICIALLY CONNECTED TO THE OFFICIAL MINECRAFT HELDEN");
+        plugin.getServer()
+            .getConsoleSender()
+            .sendMessage(Component.text("IMPORTANT: THIS PLUGIN IS MAINTAINED BY A VOLUNTEER", NamedTextColor.RED));
+        plugin.getServer()
+            .getConsoleSender()
+            .sendMessage(Component.text("AND IS NOT OFFICIALLY CONNECTED TO THE OFFICIAL MINECRAFT HELDEN", NamedTextColor.RED));
     }
 }
