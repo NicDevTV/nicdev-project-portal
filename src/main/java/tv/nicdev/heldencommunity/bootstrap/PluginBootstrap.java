@@ -5,6 +5,7 @@
  */
 package tv.nicdev.heldencommunity.bootstrap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import tv.nicdev.heldencommunity.infra.config.ConfigService;
 import tv.nicdev.heldencommunity.infra.platform.Paper120Capabilities;
@@ -24,6 +25,7 @@ public final class PluginBootstrap {
         configService.load();
 
         platformCapabilities = new Paper120Capabilities();
+        printBanner();
 
         plugin.getLogger().info("Enabled " + plugin.getName() + " on " + platformCapabilities.platformVersionLabel());
     }
@@ -38,5 +40,22 @@ public final class PluginBootstrap {
 
     public PlatformCapabilities platformCapabilities() {
         return platformCapabilities;
+    }
+
+    private void printBanner() {
+        String[] banner = {
+            " _   _ _      ____             _______     __",
+            "| \\ | (_) ___|  _ \\  _____   _|_   _\\ \\   / /",
+            "|  \\| | |/ __| | | |/ _ \\ \\ / / | |  \\ \\ / / ",
+            "| |\\  | | (__| |_| |  __/\\ V /  | |   \\ V /  ",
+            "|_| \\_|_|\\___|____/ \\___| \\_/   |_|    \\_/   "
+        };
+
+        for (String line : banner) {
+            plugin.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + line);
+        }
+
+        plugin.getServer().getConsoleSender().sendMessage(ChatColor.RED + "IMPORTANT: THIS PLUGIN IS MAINTAINED BY A VOLUNTEER");
+        plugin.getServer().getConsoleSender().sendMessage(ChatColor.RED + "AND IS NOT OFFICIALLY CONNECTED TO THE OFFICIAL MINECRAFT HELDEN");
     }
 }

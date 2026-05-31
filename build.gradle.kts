@@ -30,7 +30,13 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.build {
+    dependsOn("spotlessApply")
+}
+
 spotless {
+    lineEndings = com.diffplug.spotless.LineEnding.UNIX
+
     java {
         target("src/**/*.java")
         licenseHeader(
@@ -47,6 +53,7 @@ spotless {
 }
 
 tasks.shadowJar {
+    archiveClassifier.set("")
     configurations = project.configurations.runtimeClasspath.map { setOf(it) }
 
     dependencies {
