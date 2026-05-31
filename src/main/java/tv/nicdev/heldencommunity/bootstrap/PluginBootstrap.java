@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026 NicDevTV
+ * Licensed under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
 package tv.nicdev.heldencommunity.bootstrap;
 
 import org.bukkit.plugin.java.JavaPlugin;

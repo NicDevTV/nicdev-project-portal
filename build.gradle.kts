@@ -1,5 +1,6 @@
 plugins {
     java
+    id("com.diffplug.spotless") version "6.25.0"
     id("com.gradleup.shadow") version "9.3.1"
 }
 
@@ -27,6 +28,22 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+spotless {
+    java {
+        target("src/**/*.java")
+        licenseHeader(
+            """
+            /*
+             * Copyright (c) 2026 NicDevTV
+             * Licensed under the MIT License.
+             * https://opensource.org/licenses/MIT
+             */
+            
+            """.trimIndent()
+        )
+    }
 }
 
 tasks.shadowJar {

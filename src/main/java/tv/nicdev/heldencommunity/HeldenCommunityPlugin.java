@@ -1,7 +1,12 @@
+/*
+ * Copyright (c) 2026 NicDevTV
+ * Licensed under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
 package tv.nicdev.heldencommunity;
 
-import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bstats.bukkit.Metrics;
 import tv.nicdev.heldencommunity.bootstrap.PluginBootstrap;
 
 public final class HeldenCommunityPlugin extends JavaPlugin {
