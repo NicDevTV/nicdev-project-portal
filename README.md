@@ -1,4 +1,4 @@
-# NicDev Portal Plugin Plugin
+# NicDev Portal Plugin
 
 Dieses Projekt ist aktuell **in Entwicklung**.
 

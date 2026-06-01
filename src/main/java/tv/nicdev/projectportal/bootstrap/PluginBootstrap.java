@@ -62,5 +62,11 @@ public final class PluginBootstrap {
         plugin.getServer()
             .getConsoleSender()
             .sendMessage(Component.text("AND IS NOT OFFICIALLY CONNECTED TO ANY OF THE OFFICIAL CREATORS, TEAMS, OR BRANDS.", NamedTextColor.RED));
+        plugin.getServer()
+            .getConsoleSender()
+            .sendMessage(Component.text("WANNA HELP IMPROVE THE PLUGIN? TAKE A LOOK AT THE GITHUB REPOSITORY:", NamedTextColor.YELLOW));
+        plugin.getServer()
+            .getConsoleSender()
+            .sendMessage(Component.text("https://github.com/NicDevTV/nicdev-project-portal", NamedTextColor.YELLOW));
     }
 }

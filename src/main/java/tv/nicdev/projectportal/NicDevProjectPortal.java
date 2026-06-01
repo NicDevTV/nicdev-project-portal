@@ -15,7 +15,7 @@ public final class NicDevProjectPortal extends JavaPlugin {
     @Override
     public void onEnable() {
         // bStats
-        int pluginId = 31726;
+        int pluginId = 31737;
         Metrics metrics = new Metrics(this, pluginId);
         // bStats
 
