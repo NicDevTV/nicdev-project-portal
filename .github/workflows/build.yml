@@ -47,7 +47,7 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v5
         with:
-          name: heldencommunity-plugin
+          name: nicdevportal-plugin
           path: |
             build/libs/*.jar
             build/libs/update-manifest.json
