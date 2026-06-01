@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     java
     id("com.diffplug.spotless") version "6.25.0"
@@ -31,6 +33,7 @@ tasks.test {
 }
 
 tasks.processResources {
+    val experimentalBuild = project.findProperty("experimentalBuild")?.toString()?.toBoolean() ?: false
     val props =
         mapOf(
             "pluginName" to providers.gradleProperty("pluginName").get(),
@@ -39,9 +42,13 @@ tasks.processResources {
             "pluginApiVersion" to providers.gradleProperty("pluginApiVersion").get(),
             "pluginAuthors" to providers.gradleProperty("pluginAuthors").get(),
             "pluginDescription" to providers.gradleProperty("pluginDescription").get(),
+            "experimentalBuild" to experimentalBuild.toString(),
         )
     inputs.properties(props)
     filesMatching("plugin.yml") {
+        expand(props)
+    }
+    filesMatching("build-flags.properties") {
         expand(props)
     }
 }
@@ -77,4 +84,18 @@ tasks.shadowJar {
     }
 
     relocate("org.bstats", "${project.group}.bstats")
+}
+
+tasks.register<GradleBuild>("experimentalBuild") {
+    group = "build"
+    description = "Builds the plugin jar with experimental build flag enabled."
+    tasks = listOf("spotlessApply", "clean", "shadowJar")
+    startParameter.projectProperties = startParameter.projectProperties + mapOf("experimentalBuild" to "true")
+}
+
+tasks.named<ShadowJar>("shadowJar") {
+    if (project.findProperty("experimentalBuild")?.toString()?.toBoolean() == true) {
+        archiveVersion.set("")
+        archiveClassifier.set("experimental")
+    }
 }

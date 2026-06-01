@@ -6,6 +6,8 @@
 package tv.nicdev.projectportal.bootstrap;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import java.io.InputStream;
+import java.util.Properties;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import tv.nicdev.projectportal.infra.config.ConfigService;
@@ -44,6 +46,7 @@ public final class PluginBootstrap {
     }
 
     private void printBanner() {
+        boolean experimentalBuild = isExperimentalBuild();
         String[] banner = {
             " _   _ _      ____             _______     __",
             "| \\ | (_) ___|  _ \\  _____   _|_   _\\ \\   / /",
@@ -54,6 +57,19 @@ public final class PluginBootstrap {
 
         for (String line : banner) {
             plugin.getServer().getConsoleSender().sendMessage(Component.text(line, NamedTextColor.BLUE));
+        }
+        if (experimentalBuild) {
+            String[] experimentalBanner = {
+                " _____                      _                      _        _ ",
+                "| ____|_  ___ __   ___ _ __(_)_ __ ___   ___ _ __ | |_ __ _| |",
+                "|  _| \\ \\/ / '_ \\ / _ \\ '__| | '_ ` _ \\ / _ \\ '_ \\| __/ _` | |",
+                "| |___ >  <| |_) |  __/ |  | | | | | | |  __/ | | | || (_| | |",
+                "|_____/_/\\_\\ .__/ \\___|_|  |_|_| |_| |_|\\___|_| |_|\\__\\__,_|_|",
+                "           |_|                                                "
+            };
+            for (String line : experimentalBanner) {
+                plugin.getServer().getConsoleSender().sendMessage(Component.text(line, NamedTextColor.LIGHT_PURPLE));
+            }
         }
 
         plugin.getServer()
@@ -68,5 +84,26 @@ public final class PluginBootstrap {
         plugin.getServer()
             .getConsoleSender()
             .sendMessage(Component.text("https://github.com/NicDevTV/nicdev-project-portal", NamedTextColor.YELLOW));
+        if (experimentalBuild) {
+            plugin.getServer()
+                .getConsoleSender()
+                .sendMessage(Component.text("EXPERIMENTAL BUILDS ARE DISCONNECTED FROM OFFICIAL BUILDS,", NamedTextColor.LIGHT_PURPLE));
+            plugin.getServer()
+                .getConsoleSender()
+                .sendMessage(Component.text("INCLUDING DATABASES, AUTO-UPDATER, AND OTHER CORE SYSTEMS.", NamedTextColor.LIGHT_PURPLE));
+        }
+    }
+
+    private boolean isExperimentalBuild() {
+        Properties properties = new Properties();
+        try (InputStream inputStream = plugin.getResource("build-flags.properties")) {
+            if (inputStream == null) {
+                return false;
+            }
+            properties.load(inputStream);
+            return Boolean.parseBoolean(properties.getProperty("experimentalBuild", "false"));
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 }
