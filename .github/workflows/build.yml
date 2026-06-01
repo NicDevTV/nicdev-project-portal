@@ -4,13 +4,19 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 on:
-  release:
-    types:
-      - published
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Release tag to build, for example v1.0.0"
+        required: true
+        type: string
 
 jobs:
   release:
-    if: startsWith(github.event.release.tag_name, 'v')
+    if: github.event_name == 'push' || startsWith(inputs.tag_name, 'v')
     runs-on: ubuntu-latest
 
     permissions:
@@ -19,6 +25,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag_name || github.ref }}
 
       - name: Set up Java
         uses: actions/setup-java@v5
@@ -55,7 +63,8 @@ jobs:
       - name: Upload release assets
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event.release.tag_name }}
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag_name || github.ref_name }}
+          draft: true
           files: |
             build/libs/*.jar
             build/libs/update-manifest.json
