@@ -1,1 +1,1 @@
-rootProject.name = "heldencommunity"
+rootProject.name = "nicdevportal"

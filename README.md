@@ -1,4 +1,4 @@
-# HeldenCommunity Plugin
+# NicDev Portal Plugin Plugin
 
 Dieses Projekt ist aktuell **in Entwicklung**.
 

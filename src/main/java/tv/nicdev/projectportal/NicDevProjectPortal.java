@@ -3,13 +3,13 @@
  * Licensed under the MIT License.
  * https://opensource.org/licenses/MIT
  */
-package tv.nicdev.heldencommunity;
+package tv.nicdev.projectportal;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bstats.bukkit.Metrics;
-import tv.nicdev.heldencommunity.bootstrap.PluginBootstrap;
+import tv.nicdev.projectportal.bootstrap.PluginBootstrap;
 
-public final class HeldenCommunityPlugin extends JavaPlugin {
+public final class NicDevProjectPortal extends JavaPlugin {
     private PluginBootstrap bootstrap;
 
     @Override

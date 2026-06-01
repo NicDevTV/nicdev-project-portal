@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  * https://opensource.org/licenses/MIT
  */
-package tv.nicdev.heldencommunity.infra.config;
+package tv.nicdev.projectportal.infra.config;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

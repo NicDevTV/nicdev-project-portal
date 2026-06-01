@@ -30,6 +30,22 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.processResources {
+    val props =
+        mapOf(
+            "pluginName" to providers.gradleProperty("pluginName").get(),
+            "pluginVersion" to providers.gradleProperty("pluginVersion").get(),
+            "pluginMainClass" to providers.gradleProperty("pluginMainClass").get(),
+            "pluginApiVersion" to providers.gradleProperty("pluginApiVersion").get(),
+            "pluginAuthors" to providers.gradleProperty("pluginAuthors").get(),
+            "pluginDescription" to providers.gradleProperty("pluginDescription").get(),
+        )
+    inputs.properties(props)
+    filesMatching("plugin.yml") {
+        expand(props)
+    }
+}
+
 tasks.build {
     dependsOn("spotlessApply")
 }

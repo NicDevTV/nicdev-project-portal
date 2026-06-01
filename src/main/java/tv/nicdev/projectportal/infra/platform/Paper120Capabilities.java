@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  * https://opensource.org/licenses/MIT
  */
-package tv.nicdev.heldencommunity.infra.platform;
+package tv.nicdev.projectportal.infra.platform;
 
 public final class Paper120Capabilities implements PlatformCapabilities {
     @Override

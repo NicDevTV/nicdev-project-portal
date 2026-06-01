@@ -3,14 +3,14 @@
  * Licensed under the MIT License.
  * https://opensource.org/licenses/MIT
  */
-package tv.nicdev.heldencommunity.bootstrap;
+package tv.nicdev.projectportal.bootstrap;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import tv.nicdev.heldencommunity.infra.config.ConfigService;
-import tv.nicdev.heldencommunity.infra.platform.Paper120Capabilities;
-import tv.nicdev.heldencommunity.infra.platform.PlatformCapabilities;
+import tv.nicdev.projectportal.infra.config.ConfigService;
+import tv.nicdev.projectportal.infra.platform.Paper120Capabilities;
+import tv.nicdev.projectportal.infra.platform.PlatformCapabilities;
 
 public final class PluginBootstrap {
     private final JavaPlugin plugin;
@@ -61,6 +61,6 @@ public final class PluginBootstrap {
             .sendMessage(Component.text("IMPORTANT: THIS PLUGIN IS MAINTAINED BY A VOLUNTEER", NamedTextColor.RED));
         plugin.getServer()
             .getConsoleSender()
-            .sendMessage(Component.text("AND IS NOT OFFICIALLY CONNECTED TO THE OFFICIAL MINECRAFT HELDEN", NamedTextColor.RED));
+            .sendMessage(Component.text("AND IS NOT OFFICIALLY CONNECTED TO ANY OF THE OFFICIAL CREATORS, TEAMS, OR BRANDS.", NamedTextColor.RED));
     }
 }
