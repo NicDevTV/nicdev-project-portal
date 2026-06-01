@@ -33,15 +33,29 @@ jobs:
       - name: Build plugin
         run: ./gradlew clean shadowJar
 
+      - name: Generate update manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          BUILD_ID="${GITHUB_SHA::10}"
+          cat > build/libs/update-manifest.json <<EOF
+          {
+            "buildId": "${BUILD_ID}"
+          }
+          EOF
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v5
         with:
           name: heldencommunity-plugin
-          path: build/libs/*.jar
+          path: |
+            build/libs/*.jar
+            build/libs/update-manifest.json
 
-      - name: Create or update draft release and attach jar
+      - name: Upload release assets
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.release.tag_name }}
-          draft: true
-          files: build/libs/*.jar
+          files: |
+            build/libs/*.jar
+            build/libs/update-manifest.json

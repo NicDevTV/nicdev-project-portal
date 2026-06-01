@@ -19,7 +19,6 @@ public final class UpdateCheckerService {
     private static final String UPDATE_MANIFEST_URL =
         "https://github.com/NicDevTV/nicdev-project-portal/releases/latest/download/update-manifest.json";
     private static final Pattern BUILD_ID_PATTERN = Pattern.compile("\"buildId\"\\s*:\\s*\"([^\"]+)\"");
-    private static final Pattern DOWNLOAD_URL_PATTERN = Pattern.compile("\"downloadUrl\"\\s*:\\s*\"([^\"]+)\"");
 
     private final JavaPlugin plugin;
 
@@ -62,7 +61,6 @@ public final class UpdateCheckerService {
 
             String body = response.body();
             String remoteBuildId = matchJsonValue(BUILD_ID_PATTERN, body);
-            String downloadUrl = matchJsonValue(DOWNLOAD_URL_PATTERN, body);
             if (remoteBuildId.isBlank()) {
                 plugin.getLogger().warning("Update manifest missing buildId.");
                 return;
@@ -72,9 +70,6 @@ public final class UpdateCheckerService {
                 plugin
                     .getLogger()
                     .warning("A newer plugin build is available. Current buildId=" + localBuildId + ", latest buildId=" + remoteBuildId);
-                if (!downloadUrl.isBlank()) {
-                    plugin.getLogger().warning("Download: " + downloadUrl);
-                }
             }
         } catch (Exception exception) {
             plugin.getLogger().warning("Update check failed: " + exception.getMessage());
