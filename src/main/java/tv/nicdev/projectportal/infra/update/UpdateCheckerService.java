@@ -19,6 +19,8 @@ public final class UpdateCheckerService {
     private static final String UPDATE_MANIFEST_URL =
         "https://github.com/NicDevTV/nicdev-project-portal/releases/latest/download/update-manifest.json";
     private static final Pattern BUILD_ID_PATTERN = Pattern.compile("\"buildId\"\\s*:\\s*\"([^\"]+)\"");
+    private static final HttpClient HTTP_CLIENT =
+        HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).followRedirects(HttpClient.Redirect.NORMAL).build();
 
     private final JavaPlugin plugin;
 
@@ -52,8 +54,7 @@ public final class UpdateCheckerService {
                     .header("Accept", "application/json")
                     .build();
 
-            HttpResponse<String> response =
-                HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
                 plugin.getLogger().warning("Update check failed with HTTP " + response.statusCode());
                 return;
