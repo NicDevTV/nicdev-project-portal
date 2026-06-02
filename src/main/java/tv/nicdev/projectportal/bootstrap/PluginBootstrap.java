@@ -5,9 +5,11 @@
  */
 package tv.nicdev.projectportal.bootstrap;
 
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import tv.nicdev.projectportal.command.ProjectPortalCommand;
 import tv.nicdev.projectportal.infra.config.ConfigService;
 import tv.nicdev.projectportal.infra.platform.Paper120Capabilities;
 import tv.nicdev.projectportal.infra.platform.PlatformCapabilities;
@@ -29,6 +31,7 @@ public final class PluginBootstrap {
         updateCheckerService = new UpdateCheckerService(plugin);
 
         platformCapabilities = new Paper120Capabilities();
+        registerCommands();
         printBanner();
         updateCheckerService.checkForUpdateNotice();
 
@@ -96,4 +99,15 @@ public final class PluginBootstrap {
         }
     }
 
+    private void registerCommands() {
+        PluginCommand command = plugin.getCommand("project-portal");
+        if (command == null) {
+            plugin.getLogger().warning("Could not register /project-portal command; plugin.yml entry is missing.");
+            return;
+        }
+
+        ProjectPortalCommand projectPortalCommand = new ProjectPortalCommand(plugin, configService, updateCheckerService);
+        command.setExecutor(projectPortalCommand);
+        command.setTabCompleter(projectPortalCommand);
+    }
 }

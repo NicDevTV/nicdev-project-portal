@@ -18,11 +18,14 @@ import tv.nicdev.projectportal.infra.config.ConfigService;
 public final class UpdateCheckerService {
     private static final String UPDATE_MANIFEST_URL =
         "https://github.com/NicDevTV/nicdev-project-portal/releases/latest/download/update-manifest.json";
+    private static final String LATEST_RELEASE_URL = "https://github.com/NicDevTV/nicdev-project-portal/releases/latest";
     private static final Pattern BUILD_ID_PATTERN = Pattern.compile("\"buildId\"\\s*:\\s*\"([^\"]+)\"");
+    private static final Pattern DOWNLOAD_URL_PATTERN = Pattern.compile("\"downloadUrl\"\\s*:\\s*\"([^\"]+)\"");
     private static final HttpClient HTTP_CLIENT =
         HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).followRedirects(HttpClient.Redirect.NORMAL).build();
 
     private final JavaPlugin plugin;
+    private volatile String statusLabel = "⏳ pending";
 
     public UpdateCheckerService(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -30,19 +33,25 @@ public final class UpdateCheckerService {
 
     public void checkForUpdateNotice() {
         if (ConfigService.get().isExperimentalBuild()) {
+            statusLabel = "⏭ experimental";
             return;
         }
         if (!plugin.getConfig().getBoolean("auto-updater", true)) {
+            statusLabel = "⛔ off";
             return;
         }
 
         String localBuildId = ConfigService.get().buildId();
         if (localBuildId.isBlank()) {
-            plugin.getLogger().warning("Could not read local buildId; skipping update check.");
+            statusLabel = "⚠ LOCAL_BUILD_ID";
             return;
         }
 
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> checkRemote(UPDATE_MANIFEST_URL, localBuildId));
+    }
+
+    public String statusLabel() {
+        return statusLabel;
     }
 
     private void checkRemote(String manifestUrl, String localBuildId) {
@@ -56,24 +65,34 @@ public final class UpdateCheckerService {
 
             HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
-                plugin.getLogger().warning("Update check failed with HTTP " + response.statusCode());
+                statusLabel = "⚠ HTTP_" + response.statusCode();
                 return;
             }
 
             String body = response.body();
             String remoteBuildId = matchJsonValue(BUILD_ID_PATTERN, body);
             if (remoteBuildId.isBlank()) {
-                plugin.getLogger().warning("Update manifest missing buildId.");
+                statusLabel = "⚠ MANIFEST_BUILD_ID";
                 return;
             }
 
             if (!remoteBuildId.equals(localBuildId)) {
+                String downloadUrl = matchJsonValue(DOWNLOAD_URL_PATTERN, body);
+                if (downloadUrl.isBlank()) {
+                    downloadUrl = LATEST_RELEASE_URL;
+                }
+
                 plugin
                     .getLogger()
-                    .warning("A newer plugin build is available. Current buildId=" + localBuildId + ", latest buildId=" + remoteBuildId);
+                    .warning("A newer plugin version is available. Download the latest JAR here: " + downloadUrl);
+                statusLabel = "🆕 update";
+                return;
             }
+
+            statusLabel = "✅ ok";
         } catch (Exception exception) {
-            plugin.getLogger().warning("Update check failed: " + exception.getMessage());
+            statusLabel = "⚠ CHECK_FAILED";
+            // Just ignore update-check failures in production
         }
     }
 

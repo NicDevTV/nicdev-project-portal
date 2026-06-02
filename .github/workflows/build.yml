@@ -38,9 +38,11 @@ jobs:
         run: |
           set -euo pipefail
           BUILD_ID="${GITHUB_SHA::10}"
+          JAR_NAME="$(basename "$(find build/libs -maxdepth 1 -name '*.jar' -print -quit)")"
           cat > build/libs/update-manifest.json <<EOF
           {
-            "buildId": "${BUILD_ID}"
+            "buildId": "${BUILD_ID}",
+            "downloadUrl": "https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/${JAR_NAME}"
           }
           EOF
 
@@ -56,7 +58,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ inputs.tag_name }}
-          target_commitish: ${{ github.sha }}
+          target_commitish: ${{ github.ref_name }}
           draft: true
           files: |
             build/libs/*.jar

@@ -4,3 +4,10 @@ main: ${pluginMainClass}
 api-version: '${pluginApiVersion}'
 authors: [${pluginAuthors}]
 description: ${pluginDescription}
+
+commands:
+  project-portal:
+    description: Project Portal command.
+    usage: /project-portal info
+    aliases:
+      - pp
