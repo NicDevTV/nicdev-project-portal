@@ -14,10 +14,12 @@ import tv.nicdev.projectportal.infra.config.ConfigService;
 import tv.nicdev.projectportal.infra.platform.Paper120Capabilities;
 import tv.nicdev.projectportal.infra.platform.PlatformCapabilities;
 import tv.nicdev.projectportal.infra.update.UpdateCheckerService;
+import tv.nicdev.projectportal.utils.DatabaseUtil;
 
 public final class PluginBootstrap {
     private final JavaPlugin plugin;
     private ConfigService configService;
+    private DatabaseUtil databaseUtil;
     private PlatformCapabilities platformCapabilities;
     private UpdateCheckerService updateCheckerService;
 
@@ -28,6 +30,8 @@ public final class PluginBootstrap {
     public void enable() {
         configService = new ConfigService(plugin);
         configService.load();
+        databaseUtil = new DatabaseUtil(plugin, configService);
+        databaseUtil.connect();
         updateCheckerService = new UpdateCheckerService(plugin);
 
         platformCapabilities = new Paper120Capabilities();
@@ -39,6 +43,9 @@ public final class PluginBootstrap {
     }
 
     public void disable() {
+        if (databaseUtil != null) {
+            databaseUtil.close();
+        }
         plugin.getLogger().info("Disabled " + plugin.getName());
     }
 
@@ -48,6 +55,10 @@ public final class PluginBootstrap {
 
     public PlatformCapabilities platformCapabilities() {
         return platformCapabilities;
+    }
+
+    public DatabaseUtil databaseUtil() {
+        return databaseUtil;
     }
 
     private void printBanner() {

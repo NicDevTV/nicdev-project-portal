@@ -24,6 +24,7 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:${providers.gradleProperty("paperApiVersion").get()}")
     implementation("org.bstats:bstats-bukkit:3.2.1")
+    implementation("org.xerial:sqlite-jdbc:3.46.1.0")
 
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -35,7 +36,7 @@ tasks.test {
 
 tasks.processResources {
     val experimentalBuild = project.findProperty("experimentalBuild")?.toString()?.toBoolean() ?: false
-    val buildId = (System.getenv("GITHUB_SHA") ?: UUID.randomUUID().toString().replace("-", "")).take(10)
+    val buildId = (System.getenv("GITHUB_SHA") ?: UUID.randomUUID().toString().replace("-", "")).take(7)
     val props =
         mapOf(
             "pluginName" to providers.gradleProperty("pluginName").get(),
@@ -83,7 +84,7 @@ tasks.shadowJar {
     configurations = project.configurations.runtimeClasspath.map { setOf(it) }
 
     dependencies {
-        exclude { it.moduleGroup != "org.bstats" }
+        exclude { it.moduleGroup != "org.bstats" && it.moduleGroup != "org.xerial" }
     }
 
     relocate("org.bstats", "${project.group}.bstats")
