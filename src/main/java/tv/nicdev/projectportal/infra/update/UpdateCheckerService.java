@@ -92,7 +92,7 @@ public final class UpdateCheckerService {
             statusLabel = "✅ ok";
         } catch (Exception exception) {
             statusLabel = "⚠ CHECK_FAILED";
-            // Just ignore update-check failures in production
+            // Just ignore update-check failures useless
         }
     }
 

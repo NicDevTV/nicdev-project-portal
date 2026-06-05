@@ -34,7 +34,7 @@ public final class InfoSubCommand implements ProjectPortalSubCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        String buildId = configService.buildId().isBlank() ? "unknown" : configService.buildId();
+        String buildId = configService.buildId().isBlank() ? "corrupted build" : configService.buildId();
         String buildType = configService.isExperimentalBuild()
             ? "<gradient:#ff4fd8:#8b5cf6>Experimental</gradient>"
             : "<gradient:#14d0ff:#3d53c2>Stable</gradient>";
@@ -42,7 +42,7 @@ public final class InfoSubCommand implements ProjectPortalSubCommand {
         MessageUtils.send(sender,  "<bold><blue>" + MessageUtils.escape(plugin.getName()) + "</blue></bold>");
         MessageUtils.send(
             sender,
-            "<gray>Version:</gray> <white>" + MessageUtils.escape(plugin.getDescription().getVersion()) + "</white>"
+            "<gray>Version:</gray> <white>" + MessageUtils.escape(plugin.getPluginMeta().getVersion()) + "</white>"
         );
         MessageUtils.send(
             sender,
